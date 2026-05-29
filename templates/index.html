@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timetable Generator</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">📅</span>
+      <h1>Timetable<br/>Generator</h1>
+    </div>
+
+    <div class="form-section">
+      <h2>Schedule Config</h2>
+      <div class="config-grid">
+        <div class="form-group"><label>Start</label>
+          <input type="time" id="cfgStart" value="09:30"/></div>
+        <div class="form-group"><label>End</label>
+          <input type="time" id="cfgEnd" value="16:25"/></div>
+        <div class="form-group"><label>Lecture (min)</label>
+          <input type="number" id="cfgDuration" value="50" min="15" max="180"/></div>
+        <div class="form-group"><label>Lunch (min)</label>
+          <input type="number" id="cfgLunch" value="60" min="30" max="120"/></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Sections</h2>
+      <div class="section-row">
+        <input type="text" id="sectionName" placeholder="e.g. Section A"/>
+        <button class="btn-icon" onclick="addSection()">+</button>
+      </div>
+      <div id="sectionTabs" class="section-tabs"></div>
+    </div>
+
+    <div class="form-section">
+      <h2>Add Teacher <span id="formSectionLabel" class="section-badge"></span></h2>
+      <div class="form-group"><label>Teacher Name</label>
+        <input type="text" id="teacherName" placeholder="e.g. Dr. Smith"/></div>
+      <div class="form-group"><label>Subject</label>
+        <input type="text" id="subject" placeholder="e.g. Mathematics"/></div>
+      <div class="form-group"><label>Type</label>
+        <select id="classType">
+          <option value="Lecture">Lecture</option>
+          <option value="Practical">Practical</option>
+          <option value="Tutorial">Tutorial</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Periods per class</label>
+        <select id="classPeriods">
+          <option value="1">1 period (single)</option>
+          <option value="2">2 periods (consecutive)</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Classes / Week</label>
+        <input type="number" id="weeklyClasses" min="1" max="10" value="3"/></div>
+      <button class="btn btn-add" onclick="addTeacher()">+ Add Teacher</button>
+    </div>
+
+    <div class="teacher-list">
+      <h2>Faculty <span class="badge" id="teacherCount">0</span></h2>
+      <div id="teacherItems"></div>
+    </div>
+
+    <div class="combined-panel" id="combinedPanel" style="display:none">
+      <div class="combined-header">
+        <span>🔗 Combined Classes</span>
+        <button class="btn-link" onclick="toggleCombinedForm()">+ Add</button>
+      </div>
+      <div id="combinedForm" style="display:none">
+        <div class="form-group"><label>Teacher</label>
+          <input type="text" id="cbTeacher" placeholder="Teacher name"/></div>
+        <div class="form-group"><label>Subject</label>
+          <input type="text" id="cbSubject" placeholder="Subject"/></div>
+        <div class="form-group"><label>Type</label>
+          <select id="cbType">
+            <option value="Lecture">Lecture</option>
+            <option value="Practical">Practical</option>
+            <option value="Tutorial">Tutorial</option>
+          </select></div>
+        <div class="form-group"><label>Periods per class</label>
+          <select id="cbPeriods">
+            <option value="1">1 period (single)</option>
+            <option value="2">2 periods (consecutive)</option>
+          </select></div>
+        <div class="form-group"><label>Classes / Week</label>
+          <input type="number" id="cbWeekly" value="2" min="1" max="10"/></div>
+        <div class="form-group"><label>Sections</label>
+          <div id="cbSectionChecks" class="cb-checks"></div></div>
+        <button class="btn btn-add" onclick="addCombined()">+ Add Combined</button>
+      </div>
+      <div id="combinedList"></div>
+    </div>
+
+    <button class="btn btn-generate" onclick="generateTimetable()" id="generateBtn" disabled>
+      🚀 Generate Timetable
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="main-header">
+      <div>
+        <h2 id="mainTitle">Welcome</h2>
+        <p id="mainSubtitle">Add sections &amp; teachers, then generate.</p>
+      </div>
+      <div class="header-actions" id="headerActions" style="display:none">
+        <div class="stat-pill">✅ <span id="statScheduled">0</span> Scheduled</div>
+        <div class="stat-pill warn" id="statUnscheduledPill" style="display:none">
+          ⚠️ <span id="statUnscheduled">0</span> Unscheduled
+        </div>
+      </div>
+    </div>
+
+    <div id="resultTabBar" class="result-tab-bar" style="display:none"></div>
+
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">🗓️</div>
+      <p>Your timetable will appear here</p>
+    </div>
+
+    <div id="loadingState" class="loading-state" style="display:none">
+      <div class="spinner"></div><p>Generating schedules...</p>
+    </div>
+
+    <div id="timetableWrapper" style="display:none">
+      <div class="table-scroll">
+        <table class="timetable">
+          <thead id="timetableHead"></thead>
+          <tbody id="timetableBody"></tbody>
+        </table>
+      </div>
+      <div class="export-bar">
+        <button class="btn btn-export" onclick="exportCSV()">📥 Export CSV</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
