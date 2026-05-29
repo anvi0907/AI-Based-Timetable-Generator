@@ -85,8 +85,7 @@ pip install flask
 python app.py
 ```
 
----
- 🌐 Live Demo
+
 
 Add your deployed project link here. (LIVE WORKING DEMO)
 
