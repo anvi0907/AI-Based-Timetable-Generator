@@ -87,7 +87,7 @@ python app.py
 
 
 
-Add your deployed project link here. (LIVE WORKING DEMO)
+(LIVE WORKING DEMO)
 
 https://anvi0907.pythonanywhere.com/
 
